@@ -43,7 +43,7 @@
     "sysex",
     "guitar-effects"
   ],
-  "author": "William",
+  "author": "Arthur <athedsx@outlook.com>",
   "license": "MIT",
   "dependencies": {
     "@julusian/midi": "^3.8.0",

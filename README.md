@@ -170,4 +170,4 @@ main();
 
 ## 📄 License
 
-[MIT License](LICENSE) © 2026 William
+[MIT License](LICENSE) © 2026 Arthur
