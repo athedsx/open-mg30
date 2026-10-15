@@ -74,11 +74,14 @@ program
       console.log('🔴 Status: Dispositivo não encontrado ou desconectado.');
       await finishCommand(client, 1);
     }
-    const start = Date.now();
-    client.sendHeartbeat();
-    const elapsed = Date.now() - start;
-    console.log(`🟢 Pong! NUX MG-30 respondeu em ${elapsed}ms.`);
-    await finishCommand(client);
+    try {
+      const elapsed = await client.requestHeartbeat();
+      console.log(`🟢 Pong! NUX MG-30 respondeu em ${elapsed}ms.`);
+      await finishCommand(client);
+    } catch (error: any) {
+      console.error(`🔴 Sem resposta do NUX MG-30: ${error?.message || error}`);
+      await finishCommand(client, 1);
+    }
   });
 
 program

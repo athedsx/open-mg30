@@ -302,6 +302,30 @@ export class NuxMG30Client {
     this.transport.send(SysExEncoder.buildHeartbeatPing());
   }
 
+  /** Send a heartbeat and resolve only after the MG-30 answers. */
+  public requestHeartbeat(timeoutMs: number = 1500): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const started = Date.now();
+      const timer = setTimeout(() => {
+        this.off('heartbeat', onHeartbeat);
+        reject(new Error(`Timed out waiting for NUX MG-30 heartbeat after ${timeoutMs}ms.`));
+      }, timeoutMs);
+      const onHeartbeat = () => {
+        clearTimeout(timer);
+        this.off('heartbeat', onHeartbeat);
+        resolve(Date.now() - started);
+      };
+      this.on('heartbeat', onHeartbeat);
+      try {
+        this.sendHeartbeat();
+      } catch (error) {
+        clearTimeout(timer);
+        this.off('heartbeat', onHeartbeat);
+        reject(error);
+      }
+    });
+  }
+
   public sendCC(ccNumber: number, value: number): void {
     this.transport.send(SysExEncoder.buildControlChange(ccNumber, value));
   }

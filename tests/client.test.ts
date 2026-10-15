@@ -79,6 +79,28 @@ describe('NuxMG30Client Preset Navigation Tests', () => {
   });
 });
 
+describe('NUX heartbeat handling', () => {
+  it('waits for a real heartbeat response instead of assuming success', async () => {
+    const transport = new DummyTransport();
+    const client = new NuxMG30Client({ transport });
+    await client.connect();
+
+    const pending = client.requestHeartbeat(100);
+    expect(transport.sentMessages).toHaveLength(1);
+    expect(Array.from(transport.sentMessages[0])).toEqual([0xf0, 0x43, 0x58, 0x70, 0x0e, 0x00, 0xf7]);
+
+    transport['notifyMessage'](0, new Uint8Array([0xf0, 0x43, 0x58, 0x70, 0x0e, 0x02, 0x00, 0xf7]));
+    await expect(pending).resolves.toBeGreaterThanOrEqual(0);
+  });
+
+  it('times out when the device does not answer', async () => {
+    const transport = new DummyTransport();
+    const client = new NuxMG30Client({ transport });
+    await client.connect();
+    await expect(client.requestHeartbeat(10)).rejects.toThrow('Timed out waiting');
+  });
+});
+
 describe('NUX Block Parameter Resolution Tests', () => {
   it('should correctly resolve block and paramId for explicit block and param name', () => {
     expect(NUX_BLOCK_PARAM_CATALOG.AMP.length).toBeGreaterThan(0);

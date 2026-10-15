@@ -1,6 +1,20 @@
-# 🎸 NUX CLI (`nux`) & quicktone-bridge
+# 🎸 Open MG-30 (`nux`)
 
-> Dynamic CLI tool and TypeScript library to control, configure, backup, and interact with the **NUX MG-30** multi-effects processor via USB MIDI & SysEx.
+> Open-source CLI and TypeScript library to control, configure, back up, and interact with the **NUX MG-30** multi-effects processor via USB MIDI and SysEx.
+
+This project is an independent community implementation and is not affiliated
+with or endorsed by NUX or Cherub Technology. It is designed to work on
+Windows, macOS, and Linux wherever the MG-30 is exposed as a MIDI device.
+
+## Status
+
+The protocol layer, preset navigation, scene editing, block/model selection,
+parameter updates, and backup-oriented commands are implemented. The test suite
+includes a local transport emulator and runs without connected hardware.
+
+Before writing to a real device, create a backup and make sure the installed
+MG-30 firmware matches the protocol profile being used. Firmware updates are
+intentionally outside the scope of this CLI.
 
 ---
 
