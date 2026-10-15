@@ -16,6 +16,19 @@ Before writing to a real device, create a backup and make sure the installed
 MG-30 firmware matches the protocol profile being used. Firmware updates are
 intentionally outside the scope of this CLI.
 
+## Development
+
+```bash
+npm ci
+npm test
+npm run build
+```
+
+The test suite uses an in-memory MIDI transport, so contributors do not need a
+physical MG-30 to run the checks. Hardware validation should be performed
+separately with a backup of the device presets. Pull requests are checked
+automatically on supported Node.js versions and operating systems.
+
 ---
 
 ## ✨ NUX CLI Overview
