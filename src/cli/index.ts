@@ -348,11 +348,11 @@ presetCmd
     const client = await requireConnection();
     console.log(`📥 Lendo backup de ${file}...`);
     const data = readJsonFile<any>(file);
-    if (data.activePresetDumpHex) {
-      const bytes = Buffer.from(data.activePresetDumpHex, 'hex');
-      client.savePatch();
+    if (!data.activePresetDumpHex) {
+      throw new Error('Arquivo não contém activePresetDumpHex. Nenhum dado foi enviado.');
     }
-    console.log(`✅ Backup de ${data.device || 'NUX'} restaurado com sucesso!`);
+    await client.writePatchDump(new Uint8Array(Buffer.from(data.activePresetDumpHex, 'hex')));
+    console.log(`✅ Dump do preset ativo restaurado no hardware.`);
     await finishCommand(client);
   });
 
@@ -388,10 +388,11 @@ presetCmd
     const client = await requireConnection();
     console.log(`📥 Importando preset do arquivo ${file}...`);
     const data = readJsonFile<any>(file);
-    if (data.dumpHex) {
-      client.savePatch();
+    if (!data.dumpHex) {
+      throw new Error('Arquivo não contém dumpHex. Nenhum dado foi enviado.');
     }
-    console.log(`✅ Preset importado com sucesso!`);
+    await client.writePatchDump(new Uint8Array(Buffer.from(data.dumpHex, 'hex')));
+    console.log(`✅ Preset importado e enviado ao hardware.`);
     await finishCommand(client);
   });
 

@@ -200,6 +200,22 @@ export class NuxMG30Client {
     this.emit('patchSaved', { presetName: presetInfo.name, index: pc });
   }
 
+  /** Write a previously exported scene dump back to its preset/scene slot. */
+  public async writePatchDump(rawPatch: Uint8Array, options: { reload?: boolean; settleMs?: number } = {}): Promise<void> {
+    if (rawPatch.length < 4) {
+      throw new Error('Preset dump is too short. Expected preset, scene, and encoded scene data.');
+    }
+    const preset = rawPatch[0] & 0x7f;
+    const scene = Math.min(2, Math.max(0, rawPatch[1] & 0x7f));
+    const encodedBody = rawPatch.subarray(2);
+    this.transport.send(SysExEncoder.buildSceneDataSet(preset, scene, encodedBody));
+    await this.sleep(options.settleMs ?? 350);
+    if (options.reload ?? true) {
+      this.setPreset(preset);
+      await this.sleep(Math.max(400, options.settleMs ?? 350));
+    }
+  }
+
   /**
    * Set user patch name by modifying offsets 106..121 in the decoded scene dump.
    */

@@ -101,6 +101,18 @@ describe('NUX heartbeat handling', () => {
   });
 });
 
+describe('preset dump import', () => {
+  it('writes the exported preset/scene bytes instead of only sending save', async () => {
+    const transport = new DummyTransport();
+    const client = new NuxMG30Client({ transport });
+    await client.connect();
+    await client.writePatchDump(new Uint8Array([4, 1, 10, 11, 12]), { reload: false, settleMs: 0 });
+    expect(Array.from(transport.sentMessages[0])).toEqual([
+      0xf0, 0x43, 0x58, 0x70, 0x0b, 0x01, 4, 1, 10, 11, 12, 0xf7,
+    ]);
+  });
+});
+
 describe('NUX Block Parameter Resolution Tests', () => {
   it('should correctly resolve block and paramId for explicit block and param name', () => {
     expect(NUX_BLOCK_PARAM_CATALOG.AMP.length).toBeGreaterThan(0);

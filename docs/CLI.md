@@ -295,7 +295,7 @@ nux preset import backups/01A.json
 | Reordenar cadeia (`chain move/swap/reset`) | Não suportado pelo hardware via MIDI |
 | Firmware / reboot remoto | Não suportado |
 | Logs de comunicação (`nux logs`) | Não implementado |
-| Backup/restore completo dos 128 presets | Parcial — hoje captura principalmente o patch ativo |
+| Backup/restore completo dos 128 presets | O formato de backup/exportação está implementado; a captura em lote de todos os slots depende do dump salvo `0B` do firmware |
 | CC de knobs via USB | Não atualiza o edit buffer; a CLI usa SysEx `0B` (ver [Parameters.md](Parameters.md)) |
 
 ---

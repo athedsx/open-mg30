@@ -9,7 +9,7 @@ Windows, macOS, and Linux wherever the MG-30 is exposed as a MIDI device.
 ## Status
 
 The protocol layer, preset navigation, scene editing, block/model selection,
-parameter updates, and backup-oriented commands are implemented. The test suite
+parameter updates, dump export/import, and backup-oriented commands are implemented. The test suite
 includes a local transport emulator and runs without connected hardware.
 
 Before writing to a real device, create a backup and make sure the installed
